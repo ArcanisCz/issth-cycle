@@ -1,6 +1,5 @@
 import {Observable} from 'rx';
 import {div, img} from '@cycle/dom';
-import MeditateButton from './MeditateButton';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
 
@@ -8,17 +7,13 @@ import RightPanel from './layout/RightPanel';
 function App(sources) {
 
     const leftPanelComponent = LeftPanel({
-        DOM: sources.DOM, props$: Observable.of({
-            text: "left",
-            className: "col-md-3"
-        })
+        DOM: sources.DOM,
+        props$: Observable.of({})
     });
 
     const rightPanelComponent = RightPanel({
-        DOM: sources.DOM, props$: Observable.of({
-            text: "right",
-            className: "col-md-9"
-        })
+        DOM: sources.DOM,
+        props$: Observable.of({})
     });
 
 
@@ -27,7 +22,7 @@ function App(sources) {
         leftPanelComponent.DOM,
         rightPanelComponent.DOM,
         (leftPanelComponentVTree, rightPanelComponentVTree) =>
-            div({className: 'app row'}, [
+            div({className: 'app'}, [
                 leftPanelComponentVTree,
                 rightPanelComponentVTree
             ])
