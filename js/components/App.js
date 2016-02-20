@@ -1,34 +1,38 @@
 import {Observable} from 'rx';
 import {div, img} from '@cycle/dom';
 import MeditateButton from './MeditateButton';
+import LeftPanel from './layout/LeftPanel';
+import RightPanel from './layout/RightPanel';
 
 
 function App(sources) {
 
-    const meditateSources = {DOM: sources.DOM, props$: Observable.of({
-        text: "aaa"
-    })};
-    const meditateButtonComponent = MeditateButton(meditateSources);
+    const leftPanelComponent = LeftPanel({
+        DOM: sources.DOM, props$: Observable.of({
+            text: "left",
+            className: "col-md-3"
+        })
+    });
 
-    const meditateSources1 = {DOM: sources.DOM, props$: Observable.of({
-        text: "aaaA"
-    })};
-    const meditateButtonComponent1 = MeditateButton(meditateSources1);
-
-
+    const rightPanelComponent = RightPanel({
+        DOM: sources.DOM, props$: Observable.of({
+            text: "right",
+            className: "col-md-9"
+        })
+    });
 
 
     const vTree$ = Observable
-        .combineLatest(
-            meditateButtonComponent.DOM,
-            meditateButtonComponent1.DOM,
-            (meditateButtonComponentVTree, meditateButtonComponentVTree1) =>
-                div({className: 'app'}, [
-                    meditateButtonComponentVTree,
-                    meditateButtonComponentVTree1
-                ])
-        );
+    .combineLatest(
+        leftPanelComponent.DOM,
+        rightPanelComponent.DOM,
+        (leftPanelComponentVTree, rightPanelComponentVTree) =>
+            div({className: 'app row'}, [
+                leftPanelComponentVTree,
+                rightPanelComponentVTree
+            ])
 
+    );
 
     return {
         DOM: vTree$
