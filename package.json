@@ -16,16 +16,21 @@
     "virtual-dom"
   ],
   "scripts": {
-    "serve": "webpack-dev-server --progress --colors --inline",
+    "serve": "webpack-dev-server --progress --colors --inline --hot --watch & webpack --watch",
     "start": "npm install && npm run serve",
     "build": "NODE_ENV=production webpack"
   },
   "author": "Andre Loureiro",
   "license": "MIT",
   "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.3.26",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "less": "^2.6.0",
+    "less-loader": "^2.2.2",
+    "style-loader": "^0.13.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
   },

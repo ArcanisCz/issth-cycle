@@ -4,10 +4,17 @@ var webpack = require('webpack');
 var ENV = process.env.NODE_ENV;
 
 module.exports = {
-  entry: ['./js/main'],
+  entry: [
+    "webpack/hot/dev-server",
+    './js/main',
+    "./styles/app.less"
+  ],
   output: {
     filename: './dist/bundle.js'
   },
+  debug: true,
+  devtool: 'source-map',
+  watch: true,
   module: {
     loaders: [
       {
@@ -15,6 +22,10 @@ module.exports = {
         loaders: ['babel'],
         include: __dirname,
         exclude: /node_modules/
+      },
+      {
+        test: /\.less$/,
+        loader: "style!css!less"
       }
     ]
   },
