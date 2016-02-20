@@ -1,36 +1,38 @@
 import {Observable} from 'rx';
 import {div, img} from '@cycle/dom';
-import AdjectiveInput from './AdjectiveInput';
-import Sentence from './Sentence';
+import MeditateButton from './MeditateButton';
 
 
 function App(sources) {
 
-  const adjectiveInputComponent = AdjectiveInput({DOM: sources.DOM});
-  const adjectiveInputVTree$ = adjectiveInputComponent.DOM;
-  const adjectiveInputValue$ = adjectiveInputComponent.inputValue$;
+    const meditateSources = {DOM: sources.DOM, props$: Observable.of({
+        text: "aaa"
+    })};
+    const meditateButtonComponent = MeditateButton(meditateSources);
 
-  const sentenceSources = {DOM: sources.DOM, prop$: {adjectiveInputValue$}};
-  const sentenceComponent = Sentence(sentenceSources);
-  const sentenceVTree$ = sentenceComponent.DOM;
+    const meditateSources1 = {DOM: sources.DOM, props$: Observable.of({
+        text: "aaaA"
+    })};
+    const meditateButtonComponent1 = MeditateButton(meditateSources1);
 
-  const vTree$ = Observable
+
+
+
+    const vTree$ = Observable
         .combineLatest(
-          adjectiveInputVTree$,
-          sentenceVTree$,
-          (inputVTree, sentenceVTree) =>
-            div({className: 'app'}, [
-              img({src: '/images/cyclejs_logo.svg', width: 200}),
-              sentenceVTree,
-              inputVTree
-            ])
+            meditateButtonComponent.DOM,
+            meditateButtonComponent1.DOM,
+            (meditateButtonComponentVTree, meditateButtonComponentVTree1) =>
+                div({className: 'app'}, [
+                    meditateButtonComponentVTree,
+                    meditateButtonComponentVTree1
+                ])
         );
 
-  const sinks = {
-    DOM: vTree$
-  };
 
-  return sinks;
+    return {
+        DOM: vTree$
+    };
 }
 
 
