@@ -16,9 +16,9 @@
     "virtual-dom"
   ],
   "scripts": {
-    "serve": "webpack-dev-server --progress --colors --inline --hot --watch & webpack --watch",
+    "serve": "webpack-dev-server --progress --colors --inline --hot --watch",
     "start": "npm install && npm run serve",
-    "build": "NODE_ENV=production webpack"
+    "build": "webpack --progress --colors --inline"
   },
   "author": "Andre Loureiro",
   "license": "MIT",
