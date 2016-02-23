@@ -2,15 +2,14 @@ import {Observable} from 'rx';
 import {section, h1} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 import BasicButton from '../BasicButton';
+import MessageProvider from '../MessageProvider';
 
 
 function RightPanel(sources) {
 
-    const props$= Observable.of({
-        text: "Meditate",
-        enabled: false
-    });
+    const messages = MessageProvider();
 
+    const props$= messages.get("meditate").map(message => ({text: message}));
     const enabled$ = Observable.timer(3000).map(e => false).startWith(true);
 
     const aaa$ = Observable.combineLatest(props$, enabled$, function(props, enabled){
