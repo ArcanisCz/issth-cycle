@@ -8,6 +8,7 @@
   padding: 5px 10px;
   margin: 5px;
 
+
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
   -khtml-user-select: none;    /* Konqueror */
@@ -15,13 +16,19 @@
   -ms-user-select: none;       /* IE/Edge */
   user-select: none;
 
-  &:hover {
+  &.enabled:hover {
     background: #DDD;
   }
 
-  &:active {
+  &.enabled:active {
     background: #aaa;
   }
 
+  &.disabled {
+    cursor: inherit;
+    background: #eee;
+    border-color: #ddd;
+    color: grey;
+  }
 }
 
