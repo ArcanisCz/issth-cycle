@@ -16,7 +16,7 @@
     "virtual-dom"
   ],
   "scripts": {
-    "serve": "set NODE_ENV=production & webpack-dev-server --progress --colors --inline --hot --watch",
+    "serve": "set NODE_ENV=development & webpack-dev-server --progress --colors --inline --hot --watch",
     "start": "npm install && npm run serve",
     "build": "set NODE_ENV=production & webpack --progress --colors --inline"
   },
