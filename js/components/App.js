@@ -2,18 +2,24 @@ import {Observable} from 'rx';
 import {div, img} from '@cycle/dom';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
-
+import Resources from '../data/Resources';
 
 function App(sources) {
-
-    const leftPanelComponent = LeftPanel({
-        DOM: sources.DOM,
-        props$: Observable.of({})
-    });
 
     const rightPanelComponent = RightPanel({
         DOM: sources.DOM,
         props$: Observable.of({})
+    });
+
+    const resources = Resources({
+       addQi$: rightPanelComponent.click$.map(e => 1)
+    });
+
+
+    const leftPanelComponent = LeftPanel({
+        DOM: sources.DOM,
+        props$: Observable.of({}),
+        resources: resources
     });
 
 

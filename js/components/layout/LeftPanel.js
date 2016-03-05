@@ -1,23 +1,31 @@
 import {Observable} from 'rx';
-import {section, h1} from '@cycle/dom';
+import {section, h1, div} from '@cycle/dom';
 import isolate from "@cycle/isolate";
-import ResourceDisplay from '../ResourceDisplay'
+import ResourceDisplay from '../ResourceDisplay';
 
-
+/**
+ *
+ * @param {Object} sources
+ * @param {Observable} sources.DOM
+ * @param {Observable} sources.props$
+ * @param {Observable} sources.resources
+ *
+ * @return {{DOM: Observable, click$: Observable}}
+ */
 function LeftPanel(sources) {
-
-    const resourceDisplayComponent = ResourceDisplay({
+    const qiDisplayComponent = ResourceDisplay({
         props$: Observable.of({
             text: "Qi"
         }),
-        value$: Observable.just(10)
+        value$: sources.resources.qi$
     });
 
     const vTree$ = Observable.combineLatest(
-        sources.props$, resourceDisplayComponent.DOM,
-        (props, resourceDisplay) =>
+        sources.props$,
+        qiDisplayComponent.DOM,
+        (props, qi) =>
             section('#left-panel', {}, [
-                resourceDisplay
+                qi
             ])
     );
 
