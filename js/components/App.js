@@ -1,4 +1,4 @@
-import {Observable} from 'rx';
+import {Observable, Subject} from 'rx';
 import {div, img} from '@cycle/dom';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
@@ -8,15 +8,23 @@ import MessageProvider from '../data/MessageProvider';
 function App(sources) {
     const messageProvider = MessageProvider();
 
+    const changeQiProxy$ = new Subject();
+
+    const resources = Resources({
+        addQi$: changeQiProxy$
+        //addQi$: Observable.just(0)
+    });
+
     const rightPanelComponent = RightPanel({
         DOM: sources.DOM,
         props$: Observable.of({}),
-        messageProvider$: messageProvider
+        messageProvider$: messageProvider,
+        resources: resources
     });
 
-    const resources = Resources({
-       addQi$: rightPanelComponent.changeQi$
-    });
+    rightPanelComponent.changeQi$.subscribe(changeQiProxy$);
+
+
 
     const leftPanelComponent = LeftPanel({
         DOM: sources.DOM,

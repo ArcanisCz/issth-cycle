@@ -8,12 +8,13 @@ import BasicButton from '../BasicButton';
  * @param {Object} sources
  * @param {Observable} sources.DOM
  * @param {Observable} sources.props$
- * @param {Observable} sources.messageProvider$
+ * @param {Observable} sources.messageProvider$,
+ * @param {Observable} sources.resources
  *
  */
 function RightPanel(sources) {
     const meditateButtonComponent = makeButton(sources.messageProvider$, sources.DOM);
-    const spendButtonComponent = makeSpendButton(sources.messageProvider$, sources.DOM);
+    const spendButtonComponent = makeSpendButton(sources.messageProvider$, sources.DOM, sources.resources.qi$);
 
     const actions = intent(sources.props$);
     const state$ = model(actions, meditateButtonComponent, spendButtonComponent);
@@ -79,10 +80,10 @@ function makeButton(messages$, DOM) {
     });
 }
 
-function makeSpendButton(messages$, DOM) {
+function makeSpendButton(messages$, DOM, qi$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.meditate_button1}));
-    const enabled$ = Observable.just(true);
+    const enabled$ = qi$.map(value => value > 0);
 
     return BasicButton({
         DOM: DOM,
