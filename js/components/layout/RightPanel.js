@@ -13,12 +13,16 @@ import BasicButton from '../BasicButton';
  */
 function RightPanel(sources) {
     const meditateButtonComponent = makeButton(sources.messageProvider$, sources.DOM);
+    const spendButtonComponent = makeSpendButton(sources.messageProvider$, sources.DOM);
 
     const actions = intent(sources.props$);
-    const state$ = model(actions, meditateButtonComponent);
+    const state$ = model(actions, meditateButtonComponent, spendButtonComponent);
     return {
         DOM: view(state$),
-        addQi$: meditateButtonComponent.click$.map(e => 1)
+        changeQi$: Observable.merge(
+            meditateButtonComponent.click$.map(e => 1),
+            spendButtonComponent.click$.map(e => -1)
+        )
     };
 }
 
@@ -37,23 +41,26 @@ function intent(props$) {
  * @param {Object} actions
  * @param {Observable} actions.props$
  * @param {Object} meditateButtonComponent
+ * @param {Object} spendButtonComponent
  *
  * @return {{props$: Observable, meditateDom$: Observable}}
  */
-function model(actions, meditateButtonComponent) {
+function model(actions, meditateButtonComponent, spendButtonComponent) {
     "use strict";
     return Observable.combineLatest(
         actions.props$,
         meditateButtonComponent.DOM,
-        (props, meditateDom) => ({props, meditateDom})
+        spendButtonComponent.DOM,
+        (props, meditateDom, spendDom) => ({props, meditateDom, spendDom})
     );
 }
 
 function view(state$) {
     "use strict";
-    return state$.map(({props, meditateDom}) =>
+    return state$.map(({props, meditateDom, spendDom}) =>
         section('#right-panel', {}, [
-            meditateDom
+            meditateDom,
+            spendDom
         ])
     );
 }
@@ -72,7 +79,21 @@ function makeButton(messages$, DOM) {
     });
 }
 
+function makeSpendButton(messages$, DOM) {
+    "use strict";
+    const props$ = messages$.map(messages => ({text: messages.meditate_button1}));
+    const enabled$ = Observable.just(true);
+
+    return BasicButton({
+        DOM: DOM,
+        props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
+            props.enabled = enabled;
+            return props;
+        })
+    });
+}
+
 /**
- * @return {{DOM: Observable, addQi$: Observable}}
+ * @return {{DOM: Observable, changeQi$: Observable}}
  */
 export default sources => isolate(RightPanel)(sources)

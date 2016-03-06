@@ -10,14 +10,15 @@ import ResourceDisplay from '../ResourceDisplay';
  * @param {Observable} sources.props$
  * @param {Observable} sources.resources
  *
- * @return {{DOM: Observable, click$: Observable}}
+ * @return {{DOM: Observable}}
  */
 function LeftPanel(sources) {
     const qiDisplayComponent = ResourceDisplay({
         props$: Observable.of({
             text: "Qi"
         }),
-        value$: sources.resources.qi$
+        value$: sources.resources.qi$,
+        max$: sources.resources.qiMax$
     });
 
     const vTree$ = Observable.combineLatest(

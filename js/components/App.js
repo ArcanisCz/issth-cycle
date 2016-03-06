@@ -15,7 +15,7 @@ function App(sources) {
     });
 
     const resources = Resources({
-       addQi$: rightPanelComponent.addQi$
+       addQi$: rightPanelComponent.changeQi$
     });
 
     const leftPanelComponent = LeftPanel({
