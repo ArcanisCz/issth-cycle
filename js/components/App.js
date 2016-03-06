@@ -3,18 +3,20 @@ import {div, img} from '@cycle/dom';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
 import Resources from '../data/Resources';
+import MessageProvider from '../data/MessageProvider';
 
 function App(sources) {
+    const messageProvider = MessageProvider();
 
     const rightPanelComponent = RightPanel({
         DOM: sources.DOM,
-        props$: Observable.of({})
+        props$: Observable.of({}),
+        messageProvider$: messageProvider
     });
 
     const resources = Resources({
-       addQi$: rightPanelComponent.click$.map(e => 1)
+       addQi$: rightPanelComponent.addQi$
     });
-
 
     const leftPanelComponent = LeftPanel({
         DOM: sources.DOM,

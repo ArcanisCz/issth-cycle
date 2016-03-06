@@ -3,6 +3,14 @@ import {div, button} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 
 
+/**
+ *
+ * @param {Object} sources
+ * @param {Observable} sources.DOM
+ * @param {Observable} sources.props$
+ *
+ * @return {{DOM: Observable, click$: Observable}}
+ */
 function BasicButton(sources) {
     const actions = intent(sources.DOM, sources.props$);
     const state$ = model(actions);
