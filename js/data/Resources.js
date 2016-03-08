@@ -1,4 +1,4 @@
-import {Observable} from 'rx';
+import {Observable, BehaviorSubject} from 'rx';
 
 /**
  * @param {Object} sources
@@ -16,11 +16,16 @@ function Resources(sources) {
             const rawValue = sum + obj.change;
             const max = Math.min(rawValue, obj.max);
             return Math.max(max, obj.min);
-        }, 0);
+        }, 0)
+        .startWith(0)
+        .distinctUntilChanged();
+
+    const qiSubject = new BehaviorSubject();
+    qi$.subscribe(qiSubject);
 
     return {
-        qi$: qi$.distinctUntilChanged().share().startWith(0),
-        qiMax$: qiMax$.distinctUntilChanged().share().startWith(0)
+        qi$: qiSubject,
+        qiMax$: qiMax$
     }
 }
 

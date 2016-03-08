@@ -76,7 +76,7 @@ function makeButton(messages$, DOM) {
         props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
             props.enabled = enabled;
             return props;
-        }).share()
+        })
     });
 }
 
@@ -90,7 +90,7 @@ function makeSpendButton(messages$, DOM, qi$) {
         props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
             props.enabled = enabled;
             return props;
-        }).share()
+        })
     });
 }
 
