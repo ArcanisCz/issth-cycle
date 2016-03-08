@@ -11,8 +11,7 @@ function App(sources) {
     const changeQiProxy$ = new Subject();
 
     const resources = Resources({
-        addQi$: changeQiProxy$
-        //addQi$: Observable.just(0)
+        add$: changeQiProxy$
     });
 
     const rightPanelComponent = RightPanel({
@@ -22,7 +21,12 @@ function App(sources) {
         resources: resources
     });
 
-    rightPanelComponent.changeQi$.subscribe(changeQiProxy$);
+    rightPanelComponent.changeQi$
+        .map(value => ({
+            resource: "qi",
+            value: value
+        }))
+        .subscribe(changeQiProxy$);
 
 
 

@@ -9,7 +9,7 @@ import BasicButton from '../BasicButton';
  * @param {Observable} sources.DOM
  * @param {Observable} sources.props$
  * @param {Observable} sources.messageProvider$,
- * @param {Observable} sources.resources
+ * @param {Resources.result} sources.resources
  *
  */
 function RightPanel(sources) {
@@ -80,10 +80,10 @@ function makeButton(messages$, DOM) {
     });
 }
 
-function makeSpendButton(messages$, DOM, qi$) {
+function makeSpendButton(messages$, DOM, resource$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.meditate_button1}));
-    const enabled$ = qi$.map(value => value > 0);
+    const enabled$ = resource$.map(o => o.value > 0);
 
     return BasicButton({
         DOM: DOM,

@@ -5,25 +5,24 @@ import isolate from "@cycle/isolate";
 /**
  * @param {Object} sources
  * @param {Observable} sources.props$
- * @param {Observable} sources.value$
- * @param {Observable} sources.max$
+ * @param {Observable} sources.resouce$
  *
  * @return {{DOM: Observable}}
  */
 function ResourceDisplay(sources) {
-    const actions = intent(sources.props$, sources.value$, sources.max$);
+    const actions = intent(sources.props$, sources.resource$);
     const state$ = model(actions);
     return {
         DOM: view(state$)
     };
 }
 
-function intent(props$, value$, max$) {
+function intent(props$, resource$) {
     "use strict";
     return {
         props$: props$,
-        value$: value$,
-        max$: max$
+        value$: resource$.map(o => o.value),
+        max$: resource$.map(o => o.max)
     }
 }
 
