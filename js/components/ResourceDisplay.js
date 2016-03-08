@@ -21,8 +21,7 @@ function intent(props$, resource$) {
     "use strict";
     return {
         props$: props$,
-        value$: resource$.map(o => o.value),
-        max$: resource$.map(o => o.max)
+        resource$: resource$
     }
 }
 
@@ -30,13 +29,13 @@ function model(actions) {
     "use strict";
     return Observable.combineLatest(
         actions.props$,
-        actions.value$,
-        actions.max$,
-        (props, value, max) => {
+        actions.resource$,
+        (props, resource) => {
             return {
                 props: props,
-                value: value,
-                max: max
+                value: resource.value,
+                max: resource.max,
+                display: resource.enabled
             }
         }
     );
@@ -44,12 +43,17 @@ function model(actions) {
 
 function view(state$) {
     "use strict";
-    return state$.map(({props, value, max}) => {
-            return div('.resource-display', {}, [
-                span([props.text + ": "]),
-                span([value]),
-                span(["("+max+")"])
-            ])
+    return state$.map(({props, value, max, display}) => {
+            if(display){
+                return div('.resource-display', {}, [
+                    span([props.text + ": "]),
+                    span([value]),
+                    span(["("+max+")"])
+                ])
+            }else{
+                return null
+            }
+
         }
     );
 }

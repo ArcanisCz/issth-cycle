@@ -29,7 +29,7 @@ function Resources(sources) {
     const aaa = Observable.combineLatest(
         qi$,
         qiMax$,
-        Observable.just(true),
+        qi$.map(val => val > 0).find(val => !!val).startWith(false),
         (value, max, enabled) => ({value, max, enabled})
     );
 
