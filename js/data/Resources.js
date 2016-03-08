@@ -16,13 +16,11 @@ function Resources(sources) {
             const rawValue = sum + obj.change;
             const max = Math.min(rawValue, obj.max);
             return Math.max(max, obj.min);
-        }, 0)
-        .distinctUntilChanged()
-        .startWith(0);
+        }, 0);
 
     return {
-        qi$: qi$,
-        qiMax$: qiMax$.distinctUntilChanged()
+        qi$: qi$.distinctUntilChanged().share().startWith(0),
+        qiMax$: qiMax$.distinctUntilChanged().share().startWith(0)
     }
 }
 
