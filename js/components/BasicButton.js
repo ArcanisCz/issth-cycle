@@ -2,24 +2,6 @@ import {Observable} from 'rx';
 import {div, button} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 
-
-/**
- *
- * @param {Object} sources
- * @param {Observable} sources.DOM
- * @param {Observable} sources.props$
- *
- * @return {{DOM: Observable, click$: Observable}}
- */
-function BasicButton(sources) {
-    const actions = intent(sources.DOM, sources.props$);
-    const state$ = model(actions);
-    return {
-        DOM: view(state$),
-        click$: actions.click$
-    };
-}
-
 /**
  *
  * @param {Object} sources
@@ -30,6 +12,14 @@ function BasicButton(sources) {
  */
 export default sources => isolate(BasicButton)(sources)
 
+function BasicButton(sources) {
+    const actions = intent(sources.DOM, sources.props$);
+    const state$ = model(actions);
+    return {
+        DOM: view(state$),
+        click$: actions.click$
+    };
+}
 
 /**
  * @param {Observable} DOM

@@ -41,18 +41,12 @@ function model(actions) {
                 display: resource.enabled
             }
         }
-    ).startWith({
-        text: "",
-        value: 0,
-        max: 0,
-        display: false
-    }).distinctUntilChanged();
+    ).distinctUntilChanged();
 }
 
 function view(state$) {
     "use strict";
     return state$.map(({text, value, max, display}) => {
-
             if (display) {
                 return div('.resource-display', {}, [
                     span([text + ": "]),
@@ -60,7 +54,7 @@ function view(state$) {
                     span(["(" + max + ")"])
                 ])
             } else {
-                return null
+                return false
             }
         }
     );
