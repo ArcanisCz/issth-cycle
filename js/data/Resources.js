@@ -34,11 +34,12 @@ function Resources(sources) {
         (value, max, enabled) => ({value, max, enabled})
     );
 
-    //const qiSubject = new BehaviorSubject();
-    //aaa.subscribe(qiSubject);
-
+    const qiSubject = new BehaviorSubject();
+    aaa.subscribe(qiSubject);
+    
     return {
-        qi$: aaa.distinctUntilChanged()
+        qi$: qiSubject
+
     }
 }
 
