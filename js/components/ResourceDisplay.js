@@ -5,12 +5,15 @@ import isolate from "@cycle/isolate";
 /**
  * @param {Object} sources
  * @param {Observable} sources.props$
- * @param {Observable} sources.resouce$
+ * @param {Observable} sources.resource$
  *
  * @return {{DOM: Observable}}
  */
 function ResourceDisplay(sources) {
-    const actions = intent(sources.props$, sources.resource$);
+    const actions = intent(
+        sources.props$,
+        sources.resource$
+    );
     const state$ = model(actions);
     return {
         DOM: view(state$)
@@ -32,30 +35,36 @@ function model(actions) {
         actions.resource$,
         (props, resource) => {
             return {
-                props: props,
+                text: props.text,
                 value: resource.value,
                 max: resource.max,
                 display: resource.enabled
             }
         }
-    );
+    ).startWith({
+        text: "",
+        value: 0,
+        max: 0,
+        display: false
+    }).distinctUntilChanged();
 }
 
 function view(state$) {
     "use strict";
-    return state$.map(({props, value, max, display}) => {
-            if(display){
+    return state$.map(({text, value, max, display}) => {
+
+            if (display) {
                 return div('.resource-display', {}, [
-                    span([props.text + ": "]),
+                    span([text + ": "]),
                     span([value]),
-                    span(["("+max+")"])
+                    span(["(" + max + ")"])
                 ])
-            }else{
+            } else {
                 return null
             }
-
         }
     );
+
 }
 
 export default sources => isolate(ResourceDisplay)(sources)

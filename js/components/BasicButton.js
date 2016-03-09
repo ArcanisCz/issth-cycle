@@ -50,22 +50,24 @@ function model(actions) {
     return Observable.combineLatest(
         actions.props$,
         actions.enabled$,
-        function (props, enabled) {
-            return ({
-                props: props,
-                classes: enabled ? "enabled" : "disabled"
-            });
-        }
-    );
+        (props, enabled)=> ({
+            text: props.text,
+            classes: enabled ? "enabled" : "disabled"
+        }))
+        .startWith({
+            text: "",
+            classes: "enabled"
+        })
+        .distinctUntilChanged();
 }
 
 function view(state$) {
     "use strict";
-    return state$.map(({props, classes}) => {
+    return state$.map(({text, classes}) => {
             return div('.meditate-button', {
                 className: classes
             }, [
-                props.text
+                text
             ])
         }
     );

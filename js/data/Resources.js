@@ -29,15 +29,16 @@ function Resources(sources) {
     const aaa = Observable.combineLatest(
         qi$,
         qiMax$,
-        qi$.map(val => val > 0).find(val => !!val).startWith(false),
+        Observable.just(true),
+        //qi$.map(val => val > 0).find(val => !!val).startWith(false),
         (value, max, enabled) => ({value, max, enabled})
     );
 
-    const qiSubject = new BehaviorSubject();
-    aaa.subscribe(qiSubject);
+    //const qiSubject = new BehaviorSubject();
+    //aaa.subscribe(qiSubject);
 
     return {
-        qi$: qiSubject
+        qi$: aaa.distinctUntilChanged()
     }
 }
 

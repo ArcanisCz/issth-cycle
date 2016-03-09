@@ -83,7 +83,7 @@ function makeButton(messages$, DOM) {
 function makeSpendButton(messages$, DOM, resource$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.meditate_button1}));
-    const enabled$ = resource$.map(o => o.value > 0);
+    const enabled$ = resource$.map(o => o.value > 0).startWith(true);
 
     return BasicButton({
         DOM: DOM,

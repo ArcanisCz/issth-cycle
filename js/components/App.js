@@ -16,7 +16,7 @@ function App(sources) {
 
     const rightPanelComponent = RightPanel({
         DOM: sources.DOM,
-        props$: Observable.of({}),
+        props$: Observable.just({}),
         messageProvider$: messageProvider,
         resources: resources
     });
