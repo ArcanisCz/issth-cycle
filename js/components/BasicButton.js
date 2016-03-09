@@ -54,11 +54,7 @@ function model(actions) {
             text: props.text,
             classes: enabled ? "enabled" : "disabled"
         }))
-        .startWith({
-            text: "",
-            classes: "enabled"
-        })
-        .distinctUntilChanged();
+        .distinctUntilChanged()
 }
 
 function view(state$) {
