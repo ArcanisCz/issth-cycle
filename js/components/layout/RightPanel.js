@@ -13,19 +13,26 @@ import BasicButton from '../BasicButton';
  *
  */
 function RightPanel(sources) {
-    const meditateButtonComponent = makeButton(sources.messageProvider$, sources.DOM);
-    const spendButtonComponent = makeSpendButton(sources.messageProvider$, sources.DOM, sources.resources.qi$);
+    const absorbButtonComponent = makeAbsorbButton(sources.messageProvider$, sources.DOM, sources.resources.qi$);
+    const condenseButtonComponent = makeCondenseButton(sources.messageProvider$, sources.DOM, sources.resources.qi$);
 
     const actions = intent(sources.props$);
-    const state$ = model(actions, meditateButtonComponent, spendButtonComponent);
+    const state$ = model(actions, absorbButtonComponent, condenseButtonComponent);
     return {
         DOM: view(state$),
         changeQi$: Observable.merge(
-            meditateButtonComponent.click$.map(e => 1),
-            spendButtonComponent.click$.map(e => -1)
-        )
+            absorbButtonComponent.click$.map(e => 1),
+            condenseButtonComponent.click$.map(e => -5)
+        ),
+        changeMaxQi$: condenseButtonComponent.click$.map(e => 1)
     };
 }
+
+
+/**
+ * @return {{DOM: Observable, changeQi$: Observable, changeMaxQi$: Observable}}
+ */
+export default sources => isolate(RightPanel)(sources)
 
 /**
  * @return {{props$: Observable}}
@@ -41,35 +48,36 @@ function intent(props$) {
  *
  * @param {Object} actions
  * @param {Observable} actions.props$
- * @param {Object} meditateButtonComponent
- * @param {Object} spendButtonComponent
+ * @param {Object} absorbButtonComponent
+ * @param {Object} condenseButtonComponent
  *
- * @return {{props$: Observable, meditateDom$: Observable}}
+ * @return {{props$: Observable, absorbDom: Observable, condenseDom: Observable}}
  */
-function model(actions, meditateButtonComponent, spendButtonComponent) {
+function model(actions, absorbButtonComponent, condenseButtonComponent) {
     "use strict";
     return Observable.combineLatest(
         actions.props$,
-        meditateButtonComponent.DOM,
-        spendButtonComponent.DOM,
-        (props, meditateDom, spendDom) => ({props, meditateDom, spendDom})
+        absorbButtonComponent.DOM,
+        condenseButtonComponent.DOM,
+        (props, absorbDom, condenseDom) => ({props, absorbDom, condenseDom})
     );
 }
 
 function view(state$) {
     "use strict";
-    return state$.map(({props, meditateDom, spendDom}) =>
+    return state$.map(({props, absorbDom, condenseDom}) =>
         section('#right-panel', {}, [
-            meditateDom,
-            spendDom
+            absorbDom,
+            condenseDom
         ])
     );
 }
 
-function makeButton(messages$, DOM) {
+function makeAbsorbButton(messages$, DOM, qi$) {
     "use strict";
-    const props$ = messages$.map(messages => ({text: messages.meditate_button}));
-    const enabled$ = Observable.just(true);
+    const props$ = messages$.map(messages => ({text: messages.absorb_button}));
+    const enabled$ = qi$.map(o => o.value < o.max).startWith(true);
+    //const enabled$ = Observable.just(true);
 
     return BasicButton({
         DOM: DOM,
@@ -80,10 +88,11 @@ function makeButton(messages$, DOM) {
     });
 }
 
-function makeSpendButton(messages$, DOM, resource$) {
+function makeCondenseButton(messages$, DOM, qi$) {
     "use strict";
-    const props$ = messages$.map(messages => ({text: messages.meditate_button1}));
-    const enabled$ = resource$.map(o => o.value > 0).startWith(true);
+    const props$ = messages$.map(messages => ({text: messages.condense_button}));
+    const enabled$ = qi$.map(o => o.value >= 5).startWith(true);
+    //const enabled$ = Observable.just(true);
 
     return BasicButton({
         DOM: DOM,
@@ -94,7 +103,3 @@ function makeSpendButton(messages$, DOM, resource$) {
     });
 }
 
-/**
- * @return {{DOM: Observable, changeQi$: Observable}}
- */
-export default sources => isolate(RightPanel)(sources)

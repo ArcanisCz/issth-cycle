@@ -9,9 +9,11 @@ function App(sources) {
     const messageProvider = MessageProvider();
 
     const changeQiProxy$ = new Subject();
+    const changeMaxQiProxy$ = new Subject();
 
     const resources = Resources({
-        add$: changeQiProxy$
+        add$: changeQiProxy$,
+        addMax$: changeMaxQiProxy$
     });
 
     const rightPanelComponent = RightPanel({
@@ -27,6 +29,13 @@ function App(sources) {
             value: value
         }))
         .subscribe(changeQiProxy$);
+
+    rightPanelComponent.changeMaxQi$
+        .map(value => ({
+            resource: "qi",
+            value: value
+        }))
+        .subscribe(changeMaxQiProxy$);
 
 
 

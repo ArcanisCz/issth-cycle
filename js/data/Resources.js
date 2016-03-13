@@ -1,45 +1,42 @@
-import {Observable, BehaviorSubject} from 'rx';
-
+import {Observable, BehaviorSubject, Subject} from 'rx';
 
 
 /**
  * @param {Object} sources
  * @param {Observable} sources.add$
+ * @param {Observable} sources.addMax$
  */
 function Resources(sources) {
     "use strict";
 
     const addQi$ = sources.add$
         .filter(e => e.resource === "qi")
-        .map(e => e.value);
+        .map(e => e.value)
 
-    const qiMax$ = Observable.just(10);
+    const addMaxQi$ = sources.addMax$
+        .filter(e => e.resource === "qi")
+        .map(e => e.value)
+
     const qiMin$ = Observable.just(0);
-    const qi$ = Observable.combineLatest(addQi$, qiMax$, qiMin$, (change, max, min) =>({change, max, min}))
+    const qiMax$ = addMaxQi$.scan((sum, val) => sum + val, 5).startWith(5);
+    const qiValue$ = addQi$.withLatestFrom(qiMax$, qiMin$, (change, max, min) => ({change, max, min}))
         .scan((sum, obj) => {
             const rawValue = sum + obj.change;
             const max = Math.min(rawValue, obj.max);
             return Math.max(max, obj.min);
         }, 0)
         .startWith(0)
-        .distinctUntilChanged();
 
-    //const qiResource = Resource(qiSubject, qiMax$, Observable.just(true));
-
-    const aaa = Observable.combineLatest(
-        qi$,
+    const qi$ = Observable.combineLatest(
+        qiValue$,
         qiMax$,
-        Observable.just(true),
-        //qi$.map(val => val > 0).find(val => !!val).startWith(false),
-        (value, max, enabled) => ({value, max, enabled})
-    );
+        qiMin$,
+        Observable.just(true), //qi$.map(val => val > 0).find(val => !!val).startWith(false),
+        (value, max, min, enabled) => ({value, max, min, enabled}))
+        .distinctUntilChanged()
 
-    const qiSubject = new BehaviorSubject();
-    aaa.subscribe(qiSubject);
-    
     return {
-        qi$: qiSubject
-
+        qi$: qi$.shareValue({})
     }
 }
 

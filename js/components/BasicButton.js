@@ -17,7 +17,7 @@ function BasicButton(sources) {
     const state$ = model(actions);
     return {
         DOM: view(state$),
-        click$: actions.click$
+        click$: actions.click$.share()
     };
 }
 

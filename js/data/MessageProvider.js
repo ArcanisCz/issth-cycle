@@ -5,8 +5,8 @@ function MessageProvider() {
     "use strict";
 
     return Observable.just({
-        meditate_button: "Meditate",
-        meditate_button1: "Spend"
+        absorb_button: "Absorb Qi",
+        condense_button: "Condense Qi"
     });
 }
 
