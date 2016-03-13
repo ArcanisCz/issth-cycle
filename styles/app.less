@@ -1,0 +1,24 @@
+@import "bootstrap/bootstrap";
+
+@import "MeditateButton";
+@import "layout/RightPanel";
+@import "layout/LeftPanel";
+
+html,body,#root {
+  height: 100%;
+}
+
+.app {
+  .make-row();
+  height: 100%;
+}
+
+#left-panel {
+  .left-panel;
+  .make-md-column(3);
+}
+
+#right-panel {
+  .right-panel;
+  .make-md-column(9);
+}

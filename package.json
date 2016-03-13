@@ -1,0 +1,45 @@
+{
+  "name": "cyclejs-starter",
+  "version": "2.0.0",
+  "description": "Cycle.js starter template with ES6 and Livereload.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andreloureiro/cyclejs-starter"
+  },
+  "keywords": [
+    "reactive",
+    "framework",
+    "rxjs",
+    "rx",
+    "unidirectional",
+    "mvi",
+    "virtual-dom"
+  ],
+  "scripts": {
+    "serve": "set NODE_ENV=development & webpack-dev-server --progress --colors --inline --hot --watch",
+    "start": "npm install && npm run serve",
+    "build": "set NODE_ENV=production & webpack --progress --colors --inline"
+  },
+  "author": "Andre Loureiro",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "less": "^2.6.0",
+    "less-loader": "^2.2.2",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "dependencies": {
+    "@cycle/core": "^6.0.0",
+    "@cycle/dom": "^8.0.0",
+    "@cycle/isolate": "^1.2.0",
+    "rx": "^4.0.7"
+  }
+}
