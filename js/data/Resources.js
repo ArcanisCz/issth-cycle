@@ -11,11 +11,11 @@ function Resources(sources) {
 
     const addQi$ = sources.add$
         .filter(e => e.resource === "qi")
-        .map(e => e.value)
+        .map(e => e.value);
 
     const addMaxQi$ = sources.addMax$
         .filter(e => e.resource === "qi")
-        .map(e => e.value)
+        .map(e => e.value);
 
     const qiMin$ = Observable.just(0);
     const qiMax$ = addMaxQi$.scan((sum, val) => sum + val, 5).startWith(5);
@@ -25,7 +25,7 @@ function Resources(sources) {
             const max = Math.min(rawValue, obj.max);
             return Math.max(max, obj.min);
         }, 0)
-        .startWith(0)
+        .startWith(0);
 
     const qi$ = Observable.combineLatest(
         qiValue$,
@@ -33,7 +33,7 @@ function Resources(sources) {
         qiMin$,
         Observable.just(true), //qi$.map(val => val > 0).find(val => !!val).startWith(false),
         (value, max, min, enabled) => ({value, max, min, enabled}))
-        .distinctUntilChanged()
+        .distinctUntilChanged();
 
     return {
         qi$: qi$.shareValue({})
