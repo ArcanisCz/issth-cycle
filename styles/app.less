@@ -5,6 +5,7 @@
 @import "ResourceDisplay";
 @import "layout/RightPanel";
 @import "layout/LeftPanel";
+@import "layout/TopPanel";
 
 
 html,body,#root {
@@ -12,8 +13,11 @@ html,body,#root {
 }
 
 .app {
-  .make-row();
   height: 100%;
+}
+
+#top-panel {
+  .top-panel;
 }
 
 #left-panel {

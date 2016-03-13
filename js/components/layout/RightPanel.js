@@ -1,5 +1,5 @@
 import {Observable} from 'rx';
-import {section, h1, span} from '@cycle/dom';
+import {section, h1, span, div} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 import BasicButton from '../BasicButton';
 
@@ -67,8 +67,10 @@ function view(state$) {
     "use strict";
     return state$.map(({props, absorbDom, condenseDom}) =>
         section('#right-panel', {}, [
-            absorbDom,
-            condenseDom
+            div(".row", {}, [
+                absorbDom,
+                condenseDom
+            ])
         ])
     );
 }

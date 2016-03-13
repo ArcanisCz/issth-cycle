@@ -21,8 +21,7 @@ function LeftPanel(sources) {
     });
 
     const actions = intent(
-        sources.props$,
-        sources.resources.qi$
+        sources.props$
     );
     const state$ = model(actions);
     return {
@@ -32,11 +31,10 @@ function LeftPanel(sources) {
 
 export default sources => isolate(LeftPanel)(sources)
 
-function intent(props$, qi$) {
+function intent(props$) {
     "use strict";
     return {
-        props$: props$,
-        qi$: qi$
+        props$: props$
     }
 }
 
@@ -44,10 +42,9 @@ function model(actions) {
     "use strict";
     return Observable.combineLatest(
         actions.props$,
-        actions.qi$,
         (props, qi) => {
             return {
-                classes: qi.enabled ? "show" : "hide"
+                classes: props.display ? "show" : ""
             }
         }
     ).distinctUntilChanged();

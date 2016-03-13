@@ -1,4 +1,11 @@
 .right-panel() {
   //border: 1px solid black;
-  height: 100%;
+
+  .row {
+    .make-row();
+
+    & > div {
+      .make-md-column(2);
+    }
+  }
 }
