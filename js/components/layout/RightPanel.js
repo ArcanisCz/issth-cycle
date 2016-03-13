@@ -83,6 +83,7 @@ function makeAbsorbButton(messages$, DOM, qi$) {
         DOM: DOM,
         props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
             props.enabled = enabled;
+            props.display = true;
             return props;
         })
     });
@@ -91,13 +92,15 @@ function makeAbsorbButton(messages$, DOM, qi$) {
 function makeCondenseButton(messages$, DOM, qi$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.condense_button}));
-    const enabled$ = qi$.map(o => o.value >= 5).startWith(true);
+    const enabled$ = qi$.map(o => o.value >= 5).startWith(false);
     //const enabled$ = Observable.just(true);
+    const display$ = enabled$.filter(e => !!e).take(1).startWith(false);
 
     return BasicButton({
         DOM: DOM,
-        props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
+        props$: Observable.combineLatest(props$, enabled$, display$, (props, enabled, display) => {
             props.enabled = enabled;
+            props.display = display;
             return props;
         })
     });

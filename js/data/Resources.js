@@ -31,9 +31,10 @@ function Resources(sources) {
         qiValue$,
         qiMax$,
         qiMin$,
-        Observable.just(true), //qi$.map(val => val > 0).find(val => !!val).startWith(false),
+        qiValue$.map(val => val > 0).find(val => !!val).startWith(false),
         (value, max, min, enabled) => ({value, max, min, enabled}))
         .distinctUntilChanged();
+
 
     return {
         qi$: qi$.shareValue({})

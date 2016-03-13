@@ -41,7 +41,9 @@ function App(sources) {
 
     const leftPanelComponent = LeftPanel({
         DOM: sources.DOM,
-        props$: Observable.of({}),
+        props$: Observable.of({
+            enabled: true
+        }),
         resources: resources
     });
 

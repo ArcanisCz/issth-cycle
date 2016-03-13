@@ -42,7 +42,7 @@ function model(actions) {
         actions.enabled$,
         (props, enabled)=> ({
             text: props.text,
-            classes: enabled ? "enabled" : "disabled"
+            classes: (enabled ? "enabled" : "disabled") + (props.display ? " show" : " hide")
         }))
         .distinctUntilChanged()
 }

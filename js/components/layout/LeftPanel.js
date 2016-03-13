@@ -20,18 +20,51 @@ function LeftPanel(sources) {
         resource$: sources.resources.qi$
     });
 
-    const vTree$ = Observable.combineLatest(
+    const actions = intent(
         sources.props$,
-        qiDisplayComponent.DOM,
-        (props, qi) =>
-            section('#left-panel', {}, [
-                qi
-            ])
+        sources.resources.qi$
     );
-
+    const state$ = model(actions);
     return {
-        DOM: vTree$
+        DOM: view(state$, qiDisplayComponent.DOM)
     };
 }
 
 export default sources => isolate(LeftPanel)(sources)
+
+function intent(props$, qi$) {
+    "use strict";
+    return {
+        props$: props$,
+        qi$: qi$
+    }
+}
+
+function model(actions) {
+    "use strict";
+    return Observable.combineLatest(
+        actions.props$,
+        actions.qi$,
+        (props, qi) => {
+            return {
+                classes: qi.enabled ? "show" : "hide"
+            }
+        }
+    ).distinctUntilChanged();
+}
+
+function view(state$, qiDisplayComponent) {
+    "use strict";
+    return Observable.combineLatest(
+        state$,
+        qiDisplayComponent,
+        (state, qi) => {
+            "use strict";
+            return section('#left-panel', {
+                className: state.classes
+            }, [
+                qi
+            ])
+        }
+    );
+}
