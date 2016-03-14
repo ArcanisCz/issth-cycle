@@ -26,13 +26,24 @@
 
   &.disabled {
     cursor: inherit;
-    background: #eee;
+    //background: #eee;
     border-color: #ddd;
-    color: grey;
+    color: #ddd;
   }
 
   &.show{
     .fade-in(0.25s)
+  }
+
+  .button-tooltip {
+    position: absolute;
+    color: black;
+    background: #eee;
+    display: block;
+    border: 1px solid #ddd;
+    width: 213px;
+    top: 35px;
+    left: -1px;
   }
 }
 

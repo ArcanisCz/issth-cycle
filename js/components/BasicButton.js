@@ -47,7 +47,7 @@ function model(actions) {
         actions.enabled$,
         actions.hover$,
         (props, enabled, hover)=> ({
-            tooltip: hover && props.tooltip ? props.tooltip : false,
+            tooltipVTree: hover && props.tooltipVTree ? props.tooltipVTree : false,
             text: props.text,
             classes: (enabled ? "enabled" : "disabled") + (props.display ? " show" : " hide")
         }))
@@ -55,16 +55,16 @@ function model(actions) {
 }
 
 function view(state$) {
-    return state$.map(({text, classes, tooltip}) => {
+    return state$.map(({text, classes, tooltipVTree}) => {
             const tooltipElement = [];
-            if (tooltip) {
-                tooltipElement.push(span(tooltip))
+            if (tooltipVTree) {
+                tooltipElement.push(span(".button-tooltip",{}, tooltipVTree))
             }
             return div('.meditate-button', {
                 className: classes
             }, [
-                text,
-                tooltipElement
+                tooltipElement,
+                text
             ])
         }
     );

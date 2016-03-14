@@ -1,5 +1,5 @@
 import {Observable} from 'rx';
-import {section, h1, span, div} from '@cycle/dom';
+import {section, h1, span, div, b} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 import BasicButton from '../BasicButton';
 
@@ -79,15 +79,18 @@ function makeAbsorbButton(messages$, DOM, qi$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.absorb_button}));
     const enabled$ = qi$.map(o => o.value < o.max).startWith(true);
-    const tooltip$ = qi$.map(o => o.value);
+    const val$ = qi$.map(o => o.value);
     //const enabled$ = Observable.just(true);
 
     return BasicButton({
         DOM: DOM,
-        props$: Observable.combineLatest(props$, enabled$, tooltip$, (props, enabled, tooltip) => {
+        props$: Observable.combineLatest(props$, enabled$, val$, (props, enabled, val) => {
             props.enabled = enabled;
             props.display = true;
-            props.tooltip = "("+tooltip+" aaa)";
+            props.tooltipVTree = span([
+                val+" ",
+                b("aaa")
+            ]);
             return props;
         })
     });
