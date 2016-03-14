@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@cycle/core": "^6.0.0",
-    "@cycle/dom": "^8.0.0",
+    "@cycle/dom": "^9.1.0",
     "@cycle/isolate": "^1.2.0",
     "rx": "^4.0.7"
   }

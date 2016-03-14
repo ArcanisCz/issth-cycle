@@ -79,13 +79,15 @@ function makeAbsorbButton(messages$, DOM, qi$) {
     "use strict";
     const props$ = messages$.map(messages => ({text: messages.absorb_button}));
     const enabled$ = qi$.map(o => o.value < o.max).startWith(true);
+    const tooltip$ = qi$.map(o => o.value);
     //const enabled$ = Observable.just(true);
 
     return BasicButton({
         DOM: DOM,
-        props$: Observable.combineLatest(props$, enabled$, (props, enabled) => {
+        props$: Observable.combineLatest(props$, enabled$, tooltip$, (props, enabled, tooltip) => {
             props.enabled = enabled;
             props.display = true;
+            props.tooltip = "("+tooltip+" aaa)";
             return props;
         })
     });

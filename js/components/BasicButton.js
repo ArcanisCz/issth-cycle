@@ -1,5 +1,5 @@
 import {Observable} from 'rx';
-import {div, button} from '@cycle/dom';
+import {div, button, span} from '@cycle/dom';
 import isolate from "@cycle/isolate";
 
 /**
@@ -26,21 +26,28 @@ function BasicButton(sources) {
  * @param {Observable} props$
  */
 function intent(DOM, props$) {
-    "use strict";
     var enabled$ = props$.map(props => props.enabled);
     return {
         click$: DOM.events('click').pausable(enabled$),
+        hover$: Observable.merge(
+            DOM.events("mouseover").map(e=>true),
+            DOM.events("mouseout").map(e=>false)
+            )
+            .debounce(0)
+            .distinctUntilChanged()
+            .startWith(false),
         props$: props$,
         enabled$: enabled$
     }
 }
 
 function model(actions) {
-    "use strict";
     return Observable.combineLatest(
         actions.props$,
         actions.enabled$,
-        (props, enabled)=> ({
+        actions.hover$,
+        (props, enabled, hover)=> ({
+            tooltip: hover && props.tooltip ? props.tooltip : false,
             text: props.text,
             classes: (enabled ? "enabled" : "disabled") + (props.display ? " show" : " hide")
         }))
@@ -48,12 +55,16 @@ function model(actions) {
 }
 
 function view(state$) {
-    "use strict";
-    return state$.map(({text, classes}) => {
+    return state$.map(({text, classes, tooltip}) => {
+            const tooltipElement = [];
+            if (tooltip) {
+                tooltipElement.push(span(tooltip))
+            }
             return div('.meditate-button', {
                 className: classes
             }, [
-                text
+                text,
+                tooltipElement
             ])
         }
     );

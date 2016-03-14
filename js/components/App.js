@@ -23,7 +23,7 @@ function App(sources) {
         props$: Observable.combineLatest(
             resources.qi$,
             qi => ({
-                display: qi.max > 9
+                display: true
             })
         ),
         messageProvider$: messageProvider
@@ -43,7 +43,7 @@ function App(sources) {
         props$: Observable.combineLatest(
             resources.qi$,
             qi => ({
-                display: qi.max > 5
+                display: true
             })
         ),
         resources: resources
@@ -54,7 +54,7 @@ function App(sources) {
         props$: Observable.combineLatest(
             resources.qi$,
             qi => ({
-                display: qi.enabled
+                display: false
             })
         ),
         resources: resources
