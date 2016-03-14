@@ -6,6 +6,7 @@
 @import "layout/RightPanel";
 @import "layout/LeftPanel";
 @import "layout/TopPanel";
+@import "layout/MessagePanel";
 
 
 html,body,#root {
@@ -27,5 +28,10 @@ html,body,#root {
 
 #right-panel {
   .right-panel;
-  .make-md-column(9);
+  .make-md-column(6);
+}
+
+#message-panel {
+  .message-panel;
+  .make-md-column(3);
 }

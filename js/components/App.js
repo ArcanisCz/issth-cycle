@@ -3,6 +3,7 @@ import {div, img} from '@cycle/dom';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
 import TopPanel from './layout/TopPanel';
+import MessagePanel from './layout/MessagePanel';
 import Resources from '../data/Resources';
 import MessageProvider from '../data/MessageProvider';
 
@@ -22,10 +23,10 @@ function App(sources) {
         props$: Observable.combineLatest(
             resources.qi$,
             qi => ({
-                display: qi.max > 5
+                display: qi.max > 9
             })
         ),
-        messageProvider$: messageProvider,
+        messageProvider$: messageProvider
     });
 
     const rightPanelComponent = RightPanel({
@@ -38,6 +39,17 @@ function App(sources) {
     });
 
     const leftPanelComponent = LeftPanel({
+        DOM: sources.DOM,
+        props$: Observable.combineLatest(
+            resources.qi$,
+            qi => ({
+                display: qi.max > 5
+            })
+        ),
+        resources: resources
+    });
+
+    const messageComponent = MessagePanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
             resources.qi$,
@@ -67,14 +79,16 @@ function App(sources) {
         leftPanelComponent.DOM,
         rightPanelComponent.DOM,
         topPanelComponent.DOM,
-        (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree) =>
+        messageComponent.DOM,
+        (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree) =>
             div({className: 'row'}, [
                 div(".my-row", {}, [
                     topPanelComponentVTree
                 ]),
                 div(".my-row", {}, [
                     leftPanelComponentVTree,
-                    rightPanelComponentVTree
+                    rightPanelComponentVTree,
+                    messageComponentVTree
                 ])
             ])
 

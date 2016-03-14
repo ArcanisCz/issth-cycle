@@ -1,7 +1,6 @@
 import {Observable} from 'rx';
 import {section, h1, div} from '@cycle/dom';
 import isolate from "@cycle/isolate";
-import ResourceDisplay from '../ResourceDisplay';
 
 /**
  *
@@ -12,24 +11,17 @@ import ResourceDisplay from '../ResourceDisplay';
  *
  * @return {{DOM: Observable}}
  */
-function LeftPanel(sources) {
-    const qiDisplayComponent = ResourceDisplay({
-        props$: Observable.of({
-            text: "Qi"
-        }),
-        resource$: sources.resources.qi$
-    });
-
+function MessagePanel(sources) {
     const actions = intent(
         sources.props$
     );
     const state$ = model(actions);
     return {
-        DOM: view(state$, qiDisplayComponent.DOM)
+        DOM: view(state$)
     };
 }
 
-export default sources => isolate(LeftPanel)(sources)
+export default sources => isolate(MessagePanel)(sources)
 
 function intent(props$) {
     "use strict";
@@ -50,17 +42,16 @@ function model(actions) {
     ).distinctUntilChanged();
 }
 
-function view(state$, qiDisplayComponent) {
+function view(state$) {
     "use strict";
     return Observable.combineLatest(
         state$,
-        qiDisplayComponent,
-        (state, qi) => {
+        (state) => {
             "use strict";
-            return section('#left-panel', {
+            return section('#message-panel', {
                 className: state.classes
             }, [
-                qi
+                "aaa"
             ])
         }
     );
