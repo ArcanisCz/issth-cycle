@@ -48,17 +48,18 @@ function view(state$) {
     "use strict";
     return state$.map(({text, value, max, display}) => {
             if (display) {
-                return div('.resource-display', {}, [
+                return div('.resource-display', {
+                    className: "show fade-in one"
+                }, [
                     span([text + ": "]),
                     span([value]),
                     span(["(" + max + ")"])
                 ])
             } else {
-                return false
+                return []
             }
         }
     );
-
 }
 
 export default sources => isolate(ResourceDisplay)(sources)

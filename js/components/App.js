@@ -2,6 +2,8 @@ import {Observable, Subject} from 'rx';
 import {div, img} from '@cycle/dom';
 import LeftPanel from './layout/LeftPanel';
 import RightPanel from './layout/RightPanel';
+import TopPanel from './layout/TopPanel';
+import MessagePanel from './layout/MessagePanel';
 import Resources from '../data/Resources';
 import MessageProvider from '../data/MessageProvider';
 
@@ -16,10 +18,45 @@ function App(sources) {
         addMax$: changeMaxQiProxy$
     });
 
+    const topPanelComponent = TopPanel({
+        DOM: sources.DOM,
+        props$: Observable.combineLatest(
+            resources.qi$,
+            qi => ({
+                display: true
+            })
+        ),
+        messageProvider$: messageProvider
+    });
+
     const rightPanelComponent = RightPanel({
         DOM: sources.DOM,
-        props$: Observable.just({}),
+        props$: Observable.just({
+            display: true
+        }),
         messageProvider$: messageProvider,
+        resources: resources
+    });
+
+    const leftPanelComponent = LeftPanel({
+        DOM: sources.DOM,
+        props$: Observable.combineLatest(
+            resources.qi$,
+            qi => ({
+                display: true
+            })
+        ),
+        resources: resources
+    });
+
+    const messageComponent = MessagePanel({
+        DOM: sources.DOM,
+        props$: Observable.combineLatest(
+            resources.qi$,
+            qi => ({
+                display: false
+            })
+        ),
         resources: resources
     });
 
@@ -37,23 +74,22 @@ function App(sources) {
         }))
         .subscribe(changeMaxQiProxy$);
 
-
-
-    const leftPanelComponent = LeftPanel({
-        DOM: sources.DOM,
-        props$: Observable.of({}),
-        resources: resources
-    });
-
-
     const vTree$ = Observable
     .combineLatest(
         leftPanelComponent.DOM,
         rightPanelComponent.DOM,
-        (leftPanelComponentVTree, rightPanelComponentVTree) =>
-            div({className: 'app'}, [
-                leftPanelComponentVTree,
-                rightPanelComponentVTree
+        topPanelComponent.DOM,
+        messageComponent.DOM,
+        (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree) =>
+            div({className: 'row'}, [
+                div(".my-row", {}, [
+                    topPanelComponentVTree
+                ]),
+                div(".my-row", {}, [
+                    leftPanelComponentVTree,
+                    rightPanelComponentVTree,
+                    messageComponentVTree
+                ])
             ])
 
     );
