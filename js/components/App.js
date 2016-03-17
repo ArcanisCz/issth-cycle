@@ -6,6 +6,7 @@ import TopPanel from './layout/TopPanel';
 import MessagePanel from './layout/MessagePanel';
 import Resources from '../data/Resources';
 import MessageProvider from '../data/MessageProvider';
+import Advacement from '../data/Advacement';
 
 function App(sources) {
     const messageProvider = MessageProvider();
@@ -18,6 +19,8 @@ function App(sources) {
         addMax$: changeMaxQiProxy$
     });
 
+    const advacement$ = Advacement({});
+
     const topPanelComponent = TopPanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
@@ -26,6 +29,7 @@ function App(sources) {
                 display: true
             })
         ),
+        advacement$: advacement$,
         messageProvider$: messageProvider
     });
 
