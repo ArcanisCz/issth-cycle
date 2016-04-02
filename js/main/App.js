@@ -7,6 +7,7 @@ import MessagePanel from './../components/layout/MessagePanel';
 import Resources from '../model/Resources';
 import MessageProvider from '../data/MessageProvider';
 import Advacement from '../model/Advacement';
+import Constants from '../main/Constants';
 
 function App(sources) {
     const messageProvider = MessageProvider();
@@ -14,22 +15,28 @@ function App(sources) {
     const changeQiProxy$ = new Subject();
     const changeMaxQiProxy$ = new Subject();
 
-    const resources = Resources({
+
+    const model = {};
+
+    model.resources = Resources({
         add$: changeQiProxy$,
         addMax$: changeMaxQiProxy$
     });
 
-    const advacement$ = Advacement({});
+    model.advacement$ = Advacement({
+        resources: model.resources
+    });
+
 
     const topPanelComponent = TopPanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            resources.qi$,
-            qi => ({
-                display: true
+            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.ONE).map(e => true).startWith(false),
+            show => ({
+                display: show
             })
         ),
-        advacement$: advacement$,
+        advacement$: model.advacement$,
         messageProvider$: messageProvider
     });
 
@@ -39,29 +46,29 @@ function App(sources) {
             display: true
         }),
         messageProvider$: messageProvider,
-        resources: resources
+        resources: model.resources
     });
 
     const leftPanelComponent = LeftPanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            resources.qi$,
-            qi => ({
-                display: true
+            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.ONE).map(e => true).startWith(false),
+            show => ({
+                display: show
             })
         ),
-        resources: resources
+        resources: model.resources
     });
 
     const messageComponent = MessagePanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            resources.qi$,
-            qi => ({
-                display: false
+            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.TWO).map(e => true).startWith(false),
+            show => ({
+                display: show
             })
         ),
-        resources: resources
+        resources: model.resources
     });
 
     rightPanelComponent.changeQi$
@@ -79,24 +86,23 @@ function App(sources) {
         .subscribe(changeMaxQiProxy$);
 
     const vTree$ = Observable
-    .combineLatest(
-        leftPanelComponent.DOM,
-        rightPanelComponent.DOM,
-        topPanelComponent.DOM,
-        messageComponent.DOM,
-        (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree) =>
-            div({className: 'row'}, [
-                div(".my-row", {}, [
-                    topPanelComponentVTree
-                ]),
-                div(".my-row", {}, [
-                    leftPanelComponentVTree,
-                    rightPanelComponentVTree,
-                    messageComponentVTree
+        .combineLatest(
+            leftPanelComponent.DOM,
+            rightPanelComponent.DOM,
+            topPanelComponent.DOM,
+            messageComponent.DOM,
+            (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree) =>
+                div({className: 'row'}, [
+                    div(".my-row", {}, [
+                        topPanelComponentVTree
+                    ]),
+                    div(".my-row", {}, [
+                        leftPanelComponentVTree,
+                        rightPanelComponentVTree,
+                        messageComponentVTree
+                    ])
                 ])
-            ])
-
-    );
+        );
 
     return {
         DOM: vTree$

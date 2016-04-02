@@ -3,17 +3,33 @@ import Constants from '../main/Constants';
 
 /**
  * @param {Object} sources
+ * @param {Resources.result} sources.resources
  */
 function Advacement(sources) {
     "use strict";
 
-    return Observable.timer(2000).map(e => ({
-        rank: Constants.ADVACEMENT_RANK.FORMATION,
-        subrank: "pokus"
-    })).startWith({
-        rank: Constants.ADVACEMENT_RANK.CONDENSATION,
-        subrank: "aaaa"
-    })
+    return sources.resources.qi$
+        .map(qi => {
+            if (qi.max > 9) {
+                return {
+                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+                    subrank: Constants.CONDENSATION_SUBRANK.TWO
+                }
+            } else if (qi.max > 5) {
+                return {
+                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+                    subrank: Constants.CONDENSATION_SUBRANK.ONE
+                }
+            } else {
+                return {
+                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+                    subrank: Constants.CONDENSATION_SUBRANK.ZERO
+                }
+            }
+        }).startWith({
+            rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+            subrank: Constants.CONDENSATION_SUBRANK.ZERO
+        });
 }
 
 /**

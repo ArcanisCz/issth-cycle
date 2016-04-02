@@ -38,7 +38,8 @@ function model(actions, advacement$) {
         (props, advacement) => {
             return {
                 classes: props.display ? "show" : "",
-                rank: advacement.rank
+                rank: advacement.rank,
+                subrank: advacement.subrank
             }
         }
     ).distinctUntilChanged();
@@ -53,7 +54,7 @@ function view(state$) {
             return section('#top-panel', {
                 className: state.classes
             }, [
-                "Rank: "+state.rank
+                "Rank: " + state.rank + " (" + state.subrank + ")"
             ])
         }
     );
