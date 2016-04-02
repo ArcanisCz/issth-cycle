@@ -1,12 +1,12 @@
 import {Observable, Subject} from 'rx';
 import {div, img} from '@cycle/dom';
-import LeftPanel from './layout/LeftPanel';
-import RightPanel from './layout/RightPanel';
-import TopPanel from './layout/TopPanel';
-import MessagePanel from './layout/MessagePanel';
-import Resources from '../data/Resources';
+import LeftPanel from './../components/layout/LeftPanel';
+import RightPanel from './../components/layout/RightPanel';
+import TopPanel from './../components/layout/TopPanel';
+import MessagePanel from './../components/layout/MessagePanel';
+import Resources from '../model/Resources';
 import MessageProvider from '../data/MessageProvider';
-import Advacement from '../data/Advacement';
+import Advacement from '../model/Advacement';
 
 function App(sources) {
     const messageProvider = MessageProvider();

@@ -1,5 +1,5 @@
 import {Observable, BehaviorSubject, Subject} from 'rx';
-import Constants from '../Constants';
+import Constants from '../main/Constants';
 
 /**
  * @param {Object} sources
