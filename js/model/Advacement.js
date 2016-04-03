@@ -1,42 +1,43 @@
-import {Observable, BehaviorSubject, Subject} from 'rx';
+import {Observable} from 'rx';
 import Constants from '../main/Constants';
 
 /**
  * @param {Object} sources
  * @param {Resources.result} sources.resources
+ * @return Observable
  */
-function Advacement(sources) {
+export default function Advacement(sources) {
     "use strict";
 
-    return sources.resources.qi$
-        .map(qi => {
-            if (qi.max > 9) {
-                return {
-                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
-                    subrank: Constants.CONDENSATION_SUBRANK.TWO
-                }
-            } else if (qi.max > 5) {
-                return {
-                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
-                    subrank: Constants.CONDENSATION_SUBRANK.ONE
-                }
-            } else {
-                return {
-                    rank: Constants.ADVACEMENT_RANK.CONDENSATION,
-                    subrank: Constants.CONDENSATION_SUBRANK.ZERO
-                }
-            }
-        }).startWith({
-            rank: Constants.ADVACEMENT_RANK.CONDENSATION,
-            subrank: Constants.CONDENSATION_SUBRANK.ZERO
-        });
+    var condensationRanks = createCondensationRanks(sources.resources.qi$);
+
+    return Observable.merge(condensationRanks).do(e => console.log("e", e));
 }
 
-/**
- * @typedef {Object} Advacement.result
- * @property {Observable} $
- */
-/**
- * @return Resources.result
- */
-export default Advacement;
+function createCondensationRanks(qi$) {
+    "use strict";
+    var ranks = [];
+
+    ranks.push(Observable.just({
+        rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+        subrank: Constants.CONDENSATION_SUBRANK.ZERO
+    }));
+
+    ranks.push(qi$
+        .filter(qi => qi.max > 5)
+        .map(e => ({
+            rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+            subrank: Constants.CONDENSATION_SUBRANK.ONE
+        }))
+        .first());
+
+    ranks.push(qi$
+        .filter(qi => qi.max > 6)
+        .map(e => ({
+            rank: Constants.ADVACEMENT_RANK.CONDENSATION,
+            subrank: Constants.CONDENSATION_SUBRANK.TWO
+        }))
+        .first());
+
+    return ranks;
+}
