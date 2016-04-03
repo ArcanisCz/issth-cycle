@@ -17,7 +17,6 @@ export const SUBRANK_CONDENSATION = {
  * @return Observable
  */
 export function Advacement(sources) {
-    "use strict";
 
     const condensation_0$ = createRankStream(
         Observable.just(true),
@@ -38,9 +37,10 @@ export function Advacement(sources) {
     );
 
     return Observable.merge(
+        condensation_0$,
         condensation_1$,
         condensation_2$
-    ).shareValue(condensation_0$);
+    ).shareValue({});
 }
 
 export default {RANK, SUBRANK_CONDENSATION, Advacement}
@@ -56,4 +56,3 @@ const createRankObject = (rank, subrank) => ({
     subrank: subrank
 });
 
-const createResultStream = (startRank$, ranks$) => Observable.merge(ranks$.shareValue(startRank$));

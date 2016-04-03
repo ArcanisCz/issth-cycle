@@ -6,6 +6,7 @@
 @import "layout/RightPanel";
 @import "layout/LeftPanel";
 @import "layout/TopPanel";
+@import "layout/BottomPanel";
 @import "layout/MessagePanel";
 
 
@@ -31,7 +32,16 @@ html,body,#root {
   .make-md-column(6);
 }
 
+#bottom-panel {
+  .bottom-panel;
+}
+
 #message-panel {
   .message-panel;
   .make-md-column(3);
+}
+
+
+.clear {
+  clear: both;
 }

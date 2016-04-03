@@ -3,6 +3,7 @@ import {div, img} from '@cycle/dom';
 import LeftPanel from './../components/layout/LeftPanel';
 import RightPanel from './../components/layout/RightPanel';
 import TopPanel from './../components/layout/TopPanel';
+import BottomPanel from './../components/layout/BottomPanel';
 import MessagePanel from './../components/layout/MessagePanel';
 import Resources from '../model/Resources';
 import MessageProvider from '../data/MessageProvider';
@@ -70,6 +71,13 @@ function App(sources) {
         resources: model.resources
     });
 
+    const bottomPanelComponent = BottomPanel({
+        DOM: sources.DOM,
+        props$: Observable.just({
+            display: true
+        })
+    });
+
     rightPanelComponent.changeQi$
         .map(value => ({
             resource: "qi",
@@ -90,7 +98,8 @@ function App(sources) {
             rightPanelComponent.DOM,
             topPanelComponent.DOM,
             messageComponent.DOM,
-            (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree) =>
+            bottomPanelComponent.DOM,
+            (leftPanelComponentVTree, rightPanelComponentVTree, topPanelComponentVTree, messageComponentVTree, bottomComponentVTree) =>
                 div({className: 'row'}, [
                     div(".my-row", {}, [
                         topPanelComponentVTree
@@ -99,6 +108,10 @@ function App(sources) {
                         leftPanelComponentVTree,
                         rightPanelComponentVTree,
                         messageComponentVTree
+                    ]),
+                    div(".clear"),
+                    div(".my-row", {}, [
+                        bottomComponentVTree
                     ])
                 ])
         );
