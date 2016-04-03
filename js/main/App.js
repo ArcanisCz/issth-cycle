@@ -6,8 +6,7 @@ import TopPanel from './../components/layout/TopPanel';
 import MessagePanel from './../components/layout/MessagePanel';
 import Resources from '../model/Resources';
 import MessageProvider from '../data/MessageProvider';
-import Advacement from '../model/Advacement';
-import Constants from '../main/Constants';
+import {Advacement, RANK, SUBRANK_CONDENSATION} from '../model/Advacement';
 
 function App(sources) {
     const messageProvider = MessageProvider();
@@ -31,7 +30,7 @@ function App(sources) {
     const topPanelComponent = TopPanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.ONE).map(e => true).startWith(false),
+            model.advacement$.filter(advacement => advacement.subrank === SUBRANK_CONDENSATION.ONE).map(e => true).startWith(false),
             show => ({
                 display: show
             })
@@ -52,7 +51,7 @@ function App(sources) {
     const leftPanelComponent = LeftPanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.ONE).map(e => true).startWith(false),
+            model.advacement$.filter(advacement => advacement.subrank === SUBRANK_CONDENSATION.ONE).map(e => true).startWith(false),
             show => ({
                 display: show
             })
@@ -63,7 +62,7 @@ function App(sources) {
     const messageComponent = MessagePanel({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            model.advacement$.filter(advacement => advacement.subrank === Constants.CONDENSATION_SUBRANK.TWO).map(e => true).startWith(false),
+            model.advacement$.filter(advacement => advacement.subrank === SUBRANK_CONDENSATION.TWO).map(e => true).startWith(false),
             show => ({
                 display: show
             })
